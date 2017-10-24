@@ -20,9 +20,11 @@
         <ul class="icons">
             <li><a href="#" class="icon fa-save"><span class="label">Clone</span></a></li>
             <li>
+                {% if recipe %}
                 <a href="{{ url_for('show_recipe', recipe_id=recipe.id)}}" class="icon fa-toggle-left">
                     <span class="label">Delete</span>
                 </a>
+                {% endif %}
             </li>
         </ul>
     </header>
