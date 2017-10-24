@@ -2,6 +2,7 @@ import datetime
 import json
 
 from flask import render_template, jsonify, request, url_for
+from sqlalchemy import func
 from werkzeug.utils import redirect
 
 from cookbook_ws import app, orm, db
@@ -34,7 +35,10 @@ def random_recipe():
     TODO: Once we've got the backend implemented, we can change this method to serve a random recipe.
     """
     recipe_types = db.session.query(RecipeType)
-    return render_template("recipe_page.html", recipe_types=recipe_types)
+
+    recipe = Recipe.query.order_by(func.random()).first()
+
+    return render_template("recipe.html", recipe_types=recipe_types, recipe=recipe)
 
 
 @app.route("/recipe/<int:recipe_id>")
