@@ -199,11 +199,6 @@ def login():
     """
     This method exports the contents of the database as a JSON file.
     """
-    try:
-        recipe_types = db.session.query(RecipeType)
-    except OperationalError:
-        recipe_types = []
-
     error = None
 
     if request.method == 'POST':
@@ -216,7 +211,7 @@ def login():
             flash('You are now logged in.')
             return redirect(url_for('welcome'))
 
-    return render_template('login.html', error=error, recipe_types=recipe_types)
+    return render_template('login.html', error=error, recipe_types=[])
 
 
 @app.route('/logout')
