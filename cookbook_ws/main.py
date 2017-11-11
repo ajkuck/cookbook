@@ -178,7 +178,7 @@ def upload_file():
         #                             filename=filename))
 
         if file:
-            units, recipe_dicts = json.loads(file.read())
+            units, recipe_dicts = json.loads(file.read().decode("utf-8"))
             print(recipe_dicts)
             # jsonify(recipe_dicts)
             _import(units, recipe_dicts)
