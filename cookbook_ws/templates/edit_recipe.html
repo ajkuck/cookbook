@@ -18,17 +18,19 @@
     <header id="header">
         <a href="{{ url_for('welcome') }}" class="logo"><strong>Catija's</strong> Cookbook</a>
         <ul class="icons">
-            <li><a href="#" class="icon fa-save"><span class="label">Clone</span></a></li>
+            <li><a id="recipe_save_top" class="icon fa-save"><span class="label">Save</span></a></li>
             <li>
+                {% if recipe %}
                 <a href="{{ url_for('show_recipe', recipe_id=recipe.id)}}" class="icon fa-toggle-left">
-                    <span class="label">Delete</span>
+                    <span class="label">Cancel</span>
                 </a>
+                {% endif %}
             </li>
         </ul>
     </header>
 
 <!-- Content -->
-    <form>
+    <form id="recipe_form">
     <section>
         <br>
         <header class="main">
@@ -145,27 +147,29 @@
 
         <h2>Instructions</h2>
 
-        <table id="step_list">
-            {% for step in recipe.steps %}
-            <tr>
-                <td style="width: 3em"align="right">{{ step.step_number }}</td>
-                <td>
-                    <textarea name="recipe-step"
-                              placeholder="Description of recipe step.">{{ step.description }}</textarea>
-                </td>
-                <td style="width: 3em"align="center">
-                    <a name="remove_step" class="icon fa-remove"></a>
-                    <input type="hidden" name="recipe-step-id" value="{{ step.id }}">
-                </td>
-            </tr>
-            {% endfor %}
-            <tr>
-                <td></td>
-                <td>
-                <textarea name="recipe-step" placeholder="Description of new recipe step."></textarea>
-                </td>
-                <td></td>
-            </tr>
+        <table id="step_table">
+            <tbody>
+                {% for step in recipe.steps %}
+                <tr>
+                    <td style="width: 3em"align="right">{{ step.step_number }}</td>
+                    <td>
+                        <textarea name="recipe-step"
+                                  placeholder="Description of recipe step.">{{ step.description }}</textarea>
+                    </td>
+                    <td style="width: 3em"align="center">
+                        <a name="remove_step" class="icon fa-remove"></a>
+                        <input type="hidden" name="recipe-step-id" value="{{ step.id }}">
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td>
+                    <textarea name="recipe-step" placeholder="Description of new recipe step."></textarea>
+                    </td>
+                    <td></td>
+                </tr>
+            </tbody>
         </table>
         <input class="button fit" type="button" id="add_step" value="Add Additional Step"/>
 
@@ -184,6 +188,8 @@
     document.getElementById("add_ingredient").addEventListener("click", add_ingredient);
     document.getElementById("add_step").addEventListener("click", add_step);
     document.getElementById("recipe_submit").addEventListener("click", submit_recipe);
+    document.getElementById("recipe_save_top").addEventListener("click", submit_recipe);
+
     $('[name="remove_ingredient"]').click(remove_ingredient);
     $('[name="remove_step"]').click(remove_step);
     $('textarea').each(function () {
@@ -233,8 +239,8 @@
     function add_step()
     {
         console.log("Adding new step..." + $(this))
-        var step_list = $('#step_list');
-        step_list.append('<tr>' +
+        var step_table = $('#step_table');
+        step_table.append('<tr>' +
                 '<td></td>' +
                 '<td>' +
                 '<textarea name="recipe-step" placeholder="Description of new recipe step."></textarea>' +
@@ -255,7 +261,7 @@
         console.log("Submitting..." + $(this))
         console.log("{{recipe}}")
 
-        var formElement = $(this).closest('form');
+        var formElement = $('#recipe_form');
         console.log("Found form element:" + formElement);
         console.log("Found form element:" + formElement.find('[name="recipe-name"]').val());
 
@@ -306,8 +312,8 @@
             }
         });
 
-        var step_table = $('#step_list');
-        $(step_table).children('li').each( function( table_row_index, table_row_element ) {
+        var step_table = $('#step_table');
+        $(step_table).children('tbody').children('tr').each( function( table_row_index, table_row_element ) {
             console.log( table_row_index + ": " + table_row_element );
             var recipe_step_element = $(table_row_element).find('[name="recipe-step"]').first();
             var recipe_step_id_element = $(table_row_element).find('[name="recipe-step-id"]').first();
