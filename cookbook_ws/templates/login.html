@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block body %}
+
+
+<!-- Header -->
+	<header id="header">
+		<a href="{{ url_for('welcome') }}" class="logo"><strong>Catija's</strong> Cookbook</a>
+	</header>
+
+<!-- Banner -->
+	<section id="banner">
+		<div class="content">
+
+        <h3>Log In</h3>
+
+        <form method="post" action="#">
+            <div class="row uniform">
+                <div class="6u$ 6u$(xsmall)">
+                    <input type="text" name="username" id="login-name" value="" placeholder="Name" />
+                </div>
+                <div class="6u$ 6u$(xsmall)">
+                    <input type="password" name="password" id="login-pass" value="" placeholder="Password" />
+                </div>
+                <!-- Break -->
+                <div class="12u$">
+                    <ul class="actions">
+                        <li><input type="submit" value="Submit" class="special" /></li>
+                    </ul>
+                </div>
+            </div>
+        </form>
+        </div>
+
+
+    </section>
+    {% if error %}
+    <footer>
+        <h3>Error: {{ error }}</h3>
+    </footer>
+    {% endif %}
+
+{% endblock %}
