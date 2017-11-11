@@ -100,6 +100,7 @@ class Recipe(db.Model):
     description = db.Column(db.String(250))
     source = db.Column(db.String(250), nullable=True)
     source_url = db.Column(db.String(250), nullable=True)
+    image_url = db.Column(db.String(250), nullable=True)
     total_served = db.Column(db.Integer, nullable=True)
     recipe_type_id = db.Column(db.Integer, db.ForeignKey('recipe_type.id'), nullable=True)
     recipe_type = db.relationship("RecipeType")

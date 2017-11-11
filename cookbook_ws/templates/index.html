@@ -32,7 +32,9 @@
 		<div class="posts">
             {% for recipe in recipes %}
                 <article>
-                    <a href="{{ url_for('show_recipe', recipe_id=recipe.id) }}" class="image"><img src="{{ url_for('static', filename='images/pic01.jpg') }}" alt="" /></a>
+                    <a href="{{ url_for('show_recipe', recipe_id=recipe.id) }}" class="image fit">
+						<img src="{{ recipe.image_url }}" alt="" />
+					</a>
                     <h3>{{ recipe.name }}</h3>
                     <p>{{ recipe.description }}</p>
                     <ul class="actions">
