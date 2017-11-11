@@ -17,11 +17,13 @@
 <!-- Header -->
     <header id="header">
         <a href="{{ url_for('welcome') }}" class="logo"><strong>Catija's</strong> Cookbook</a>
+        {% if session.logged_in %}
         <ul class="icons">
             <li><a href="{{ url_for('edit_recipe', recipe_id=recipe.id)}}" class="icon fa-edit"><span class="label">Edit</span></a></li>
             <li><a href="#" class="icon fa-clone"><span class="label">Clone</span></a></li>
             <li><a href="#" class="icon fa-trash"><span class="label">Delete</span></a></li>
         </ul>
+        {% endif %}
     </header>
 
 <!-- Content -->
@@ -108,6 +110,7 @@
         {% endfor %}
         </div>
         <hr>
+        {% if session.logged_in %}
         <form method="post"
               action="{{ url_for('new_note') }}"
               enctype="multipart/form-data">
@@ -125,7 +128,7 @@
                 </div>
             </div>
         </form>
-
+        {% endif %}
     </section>
 
 

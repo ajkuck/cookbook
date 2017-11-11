@@ -1,7 +1,7 @@
 import datetime
 import json
 
-from flask import render_template, jsonify, request, url_for
+from flask import render_template, jsonify, request, url_for, flash, session, abort
 from sqlalchemy import func
 from werkzeug.utils import redirect
 
@@ -13,8 +13,8 @@ from cookbook_ws.orm import RecipeType, Recipe, RecipeNote, IngredientUnit
 def _jinja2_filter_datetime(date):
 
     date = date.replace(tzinfo=datetime.timezone.utc).astimezone(tz=None)
-    format = '%b %d, %Y at %-I:%M %p'
-    return date.strftime(format)
+    date_format = '%b %d, %Y at %-I:%M %p'
+    return date.strftime(date_format)
 
 
 @app.route("/")
@@ -64,6 +64,8 @@ def edit_recipe(recipe_id=None):
     Args:
         recipe_id (int): Integer recipe identifier.
     """
+    if not session.get('logged_in'):
+        abort(401)
 
     recipe_types = db.session.query(RecipeType)
 
@@ -87,6 +89,8 @@ def reset_db():
 
     This is very, VERY, temporary.
     """
+    if not session.get('logged_in'):
+        abort(401)
 
     orm.initialize()
 
@@ -95,6 +99,9 @@ def reset_db():
 
 @app.route('/new_note', methods=['GET', 'POST'])
 def new_note():
+
+    if not session.get('logged_in'):
+        abort(401)
 
     if request.method == 'POST':
         print(request)
@@ -160,23 +167,11 @@ def _import(units, recipes):
 
 @app.route('/import', methods=['GET', 'POST'])
 def upload_file():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        # if 'file' not in request.files:
-        #     # flash('No file part')
-        #     # return redirect(request.url)
-        file = request.files['import_data']
-        # # if user does not select file, browser also
-        # # submit a empty part without filename
-        # if file.filename == '':
-        #     flash('No selected file')
-        #     return redirect(request.url)
-        # if file and allowed_file(file.filename):
-        #     filename = secure_filename(file.filename)
-        #     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        #     return redirect(url_for('uploaded_file',
-        #                             filename=filename))
+    if not session.get('logged_in'):
+        abort(401)
 
+    if request.method == 'POST':
+        file = request.files['import_data']
         if file:
             units, recipe_dicts = json.loads(file.read().decode("utf-8"))
             print(recipe_dicts)
@@ -196,3 +191,32 @@ def admin():
     """
     recipe_types = db.session.query(RecipeType)
     return render_template("admin.html", recipe_types=recipe_types)
+
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    """
+    This method exports the contents of the database as a JSON file.
+    """
+    recipe_types = db.session.query(RecipeType)
+
+    error = None
+
+    if request.method == 'POST':
+        if request.form['username'] != app.config['USERNAME']:
+            error = 'Invalid username'
+        elif request.form['password'] != app.config['PASSWORD']:
+            error = 'Invalid password'
+        else:
+            session['logged_in'] = True
+            flash('You are now logged in.')
+            return redirect(url_for('welcome'))
+
+    return render_template('login.html', error=error, recipe_types=recipe_types)
+
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    flash('You were logged out')
+    return redirect(url_for('welcome'))
