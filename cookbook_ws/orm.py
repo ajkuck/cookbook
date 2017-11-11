@@ -1,5 +1,6 @@
 import datetime
 import logging
+import pprint
 
 from fractions import Fraction
 from cookbook_ws import db
@@ -59,7 +60,12 @@ def _deserialize(model_class, data_dict):
     deser = model_class()
 
     for column in deser.__table__.columns:
+
         if column.name in data_dict:
+            # Ignore any columns that are None or zero length strings.
+            if isinstance(data_dict[column.name], str) and len(data_dict[column.name]) == 0:
+                continue
+
             if isinstance(column.type, db.DateTime):
                 setattr(deser, column.name,
                         datetime.datetime.strptime(data_dict[column.name], "%b %d, %Y at %I:%M %p"))
@@ -156,6 +162,7 @@ class RecipeIngredient(db.Model):
 
     @classmethod
     def deserialize(cls, recipe_dict):
+        print("Desertializing: {}".format(pprint.pformat(recipe_dict)))
         return _deserialize(cls, recipe_dict)
 
     @property
