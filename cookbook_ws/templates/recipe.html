@@ -61,7 +61,12 @@
                     {% endfor %}
                 </table>
             </div>
-            <div class="6u$"><span class="image fit"><img src="{{ url_for('static', filename='images/kitchen_left.jpg') }}" alt="" /></span></div>
+            <div class="6u$">
+                <span class="image fit">
+                    <!--if {{ recipe.source_url }}-->
+                    <img src="{{ recipe.image_url }}" alt="{{ url_for('static', filename='images/kitchen_left.jpg') }}"/>
+                </span>
+            </div>
         </div>
 
         <h2>Instructions</h2>

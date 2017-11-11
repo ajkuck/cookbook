@@ -45,6 +45,10 @@
                     <td>Source URL: </td><td><input type="text" value="{{ recipe.source_url }}" name="recipe-source-url" placeholder="Source URL"></td>
                 </tr>
                 <tr>
+                    <td>Image URL: </td><td><input type="text" value="{{ recipe.image_url }}" name="recipe-image-url" placeholder="Image URL"></td>
+                </tr>
+
+                <tr>
                     <td>Recipe Type: </td><td>
                         <select name="recipe-type">
                             <option value="">- Recipe Type -</option>
@@ -269,6 +273,7 @@
         var recipe_name_element = formElement.find('[name="recipe-name"]').first();
         var recipe_source_element = formElement.find('[name="recipe-source"]').first();
         var recipe_src_url_element = formElement.find('[name="recipe-source-url"]').first();
+        var recipe_img_url_element = formElement.find('[name="recipe-image-url"]').first();
         var recipe_desc_element = formElement.find('[name="recipe-desc"]').first();
         var total_served_element = formElement.find('[name="recipe-served"]').first();
         var recipe_type_element = formElement.find('[name="recipe-type"]').first();
@@ -276,6 +281,7 @@
         var dataObject = { 'name': recipe_name_element.val(),
                            'source': recipe_source_element.val(),
                            'source_url': recipe_src_url_element.val(),
+                           'image_url': recipe_img_url_element.val(),
                            'description': recipe_desc_element.val(),
                            'total_served': total_served_element.val(),
                            'recipe_type_id': recipe_type_element.find(":selected").val(),
