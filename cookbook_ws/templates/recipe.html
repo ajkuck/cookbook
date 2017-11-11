@@ -40,7 +40,7 @@
 
         <div class="row">
             <div class="12u 12u$(large)">
-                <p>{{ recipe.description }}</p>
+                <p>{{ recipe.description | safe }}</p>
             </div>
             <div class="6u 12u$(large)">
                 <p>Category: {{ recipe.recipe_type.name }}</p>
