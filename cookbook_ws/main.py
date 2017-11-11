@@ -1,5 +1,6 @@
 import datetime
 import json
+from sqlite3 import OperationalError
 
 from flask import render_template, jsonify, request, url_for, flash, session, abort
 from sqlalchemy import func
@@ -198,7 +199,10 @@ def login():
     """
     This method exports the contents of the database as a JSON file.
     """
-    recipe_types = db.session.query(RecipeType)
+    try:
+        recipe_types = db.session.query(RecipeType)
+    except OperationalError:
+        recipe_types = []
 
     error = None
 
