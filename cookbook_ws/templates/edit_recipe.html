@@ -137,7 +137,7 @@
                             <input type="checkbox" id="divided" name="ingredient-divided" name="divided">
                             <label for="divided">Divided</label>
                         </td>
-                        <td></td>
+                        <td><a name="remove_ingredient" class="icon fa-remove"></a></td>
                     </tr>
                     </tbody>
                     <tfoot>
@@ -171,7 +171,9 @@
                     <td>
                     <textarea name="recipe-step" placeholder="Description of new recipe step."></textarea>
                     </td>
-                    <td></td>
+                     <td style="width: 3em"align="center">
+                        <a name="remove_step" class="icon fa-remove"></a>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -208,30 +210,40 @@
         console.log("Adding ingredient row..." + $(this))
         var ingredient_table = $('#ingredient_table');
 
-        ingredient_table.append('<tr>' +
-                        '<td align="right"><input type="number" style="width: 70px;" placeholder="0" name="ingredient-amount" value="0"></td>' +
-                        '<td>' +
-                        '    <select>' +
-                        '        <option value="">- Units -</option>' +
-                        '        {% for unit in ingredient_units  %}' +
-                        '        <option value="{{unit.id}}">{{unit.name}}</option>' +
-                        '        {% endfor %}' +
-                        '    </select>' +
-                        '</td>' +
-                        '<td>' +
-                        '    <input type="text" placeholder="Pre-measurement processing" title="Pre-measurement processing. Use this to write \'sifted\' if your ingredient is \'sifted\' flour.">' +
-                        '</td>' +
-                        '<td>' +
-                        '    <input type="text" placeholder="Ingredient Name">' +
-                        '</td>' +
-                        '<td>' +
-                        '    <input type="text" placeholder="Post-measurement processing">' +
-                        '</td>' +
-                        '<td>' +
-                        '    <input type="checkbox" id="divided" name="divided">' +
-                        '    <label for="divided">Divided</label>' +
-                        '</td>')
+        var table_length = $('#ingredient_table tr').length
 
+        console.log("Adding row passed " + table_length);
+
+        ingredient_table.append(
+            '<tr>' +
+            '<td align="right"> '+
+            '<input type="number" style="width: 70px;" placeholder="0" name="ingredient-amount" value="0">' +
+            '</td>' +
+            '<td>' +
+            '    <select name="ingredient-units">' +
+            '        <option value="">- Units -</option>' +
+            '        {% for unit in ingredient_units  %}' +
+            '        <option value="{{unit.id}}">{{unit.name}}</option>' +
+            '        {% endfor %}' +
+            '    </select>' +
+            '</td>' +
+            '<td>' +
+            '    <input type="text" name="ingredient-pre-proc" ' +
+            '     placeholder="Pre-measurement processing" title="Pre-measurement processing. Use this to write \'sifted\' if your ingredient is \'sifted\' flour.">' +
+            '</td>' +
+            '<td>' +
+            '    <input type="text" name="ingredient-name" placeholder="Ingredient Name">' +
+            '</td>' +
+            '<td>' +
+            '    <input type="text" name="ingredient-post-proc" placeholder="Post-measurement processing">' +
+            '</td>' +
+            '<td>' +
+            '    <input type="checkbox" id="divided_' + table_length + '" name="ingredient-divided"">' +
+            '    <label for="divided_' + table_length + '">Divided</label>' +
+            '</td>'+
+            '<td><a name="remove_ingredient" class="icon fa-remove"></a></td>')
+
+        $('[name="remove_ingredient"]').click(remove_ingredient);
     }
 
     function remove_ingredient()
@@ -249,14 +261,17 @@
                 '<td>' +
                 '<textarea name="recipe-step" placeholder="Description of new recipe step."></textarea>' +
                 '</td>' +
-                '<td></td>' +
+                '<td style="width: 3em" align="center">' +
+                '<a name="remove_step" class="icon fa-remove"></a>' +
+                '</td>' +
             '</tr>')
 
+        $('[name="remove_step"]').click(remove_step);
     }
 
     function remove_step()
     {
-         $(this).closest('li').remove();
+         $(this).closest('tr').remove();
          return false;
     }
 
