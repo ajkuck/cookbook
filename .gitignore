@@ -1,2 +1,4 @@
 .idea
 margin_env
+main.ini
+**/__pycache__
